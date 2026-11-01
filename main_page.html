@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velora Sky | Hotel Booking & Car Service</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background:
+        radial-gradient(ellipse at 20% 30%, #2a1b52 0%, transparent 45%),
+        radial-gradient(ellipse at 80% 70%, #0f244d 0%, transparent 45%),
+        linear-gradient(135deg, #02040f, #070b20, #0d1430, #151e45);
+    color: white;
+}
+
+/* MUSIC BUTTON */
+.music-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+    padding: 13px 25px;
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 30px;
+    background: linear-gradient(135deg, #7b42c2, #9966ff);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 20px #9966ff88;
+    transition: 0.3s;
+}
+
+.music-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 30px #c09aff;
+}
+
+.music-btn.playing {
+    background: linear-gradient(135deg, #ff9800, #ffd700);
+    color: #24133d;
+    box-shadow: 0 0 25px #ffd70088;
+}
+
+/* STAR BACKGROUND */
+#stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 2.5s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(0.6); }
+    50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* SHOOTING METEORS */
+.meteor {
+    position: absolute;
+    width: 150px;
+    height: 2px;
+    background: linear-gradient(90deg, #ffd700, #ffffff, transparent);
+    transform: rotate(-35deg);
+    animation: meteorMove 5s linear infinite;
+    opacity: 0;
+}
+
+@keyframes meteorMove {
+    0% { transform: translate(0, 0) rotate(-35deg); opacity: 0; }
+    15% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translate(-800px, 550px) rotate(-35deg); opacity: 0; }
+}
+
+/* PLANETS */
+.planet {
+    position: fixed;
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.planet-one {
+    width: 200px;
+    height: 200px;
+    top: 8%;
+    right: 6%;
+    background:
+        radial-gradient(circle at 25% 25%, #ffe8f8, #d8a8f0 35%, #7b42c2 65%, #2f145c 85%);
+    box-shadow: 0 0 60px #b87aff77, inset -20px -20px 40px rgba(0,0,0,0.3);
+    animation: floatPlanet 9s ease-in-out infinite;
+}
+
+.planet-two {
+    width: 90px;
+    height: 90px;
+    bottom: 10%;
+    left: 4%;
+    background:
+        radial-gradient(circle at 30% 30%, #fff8d0, #ffd54f 40%, #ff9800 70%, #5e2a00 90%);
+    box-shadow: 0 0 50px #ffb30066, inset -15px -15px 30px rgba(0,0,0,0.25);
+    animation: floatPlanet 7.5s ease-in-out infinite;
+}
+
+@keyframes floatPlanet {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-30px); }
+}
+
+/* MAIN CONTENT */
+.overlay {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    padding: 60px 20px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* TITLE */
+.main-title {
+    font-size: 3.8rem;
+    color: #ffffff;
+    text-shadow:
+        0 0 20px #d4b3ff,
+        0 0 40px #9966ff,
+        0 0 60px #6633cc;
+    margin-bottom: 8px;
+    letter-spacing: 4px;
+    animation: titleGlow 3s infinite alternate;
+}
+
+@keyframes titleGlow {
+    from {
+        text-shadow: 0 0 15px #d4b3ff, 0 0 35px #9966ff, 0 0 55px #6633cc;
+    }
+    to {
+        text-shadow: 0 0 25px #fff, 0 0 45px #ccb3ff, 0 0 70px #9966ff, 0 0 90px #6633cc;
+    }
+}
+
+.sub-title {
+    font-size: 1.4rem;
+    color: #faf9fc;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+}
+
+.tagline {
+    font-size: 1.05rem;
+    color: #c8c5e0;
+    font-style: italic;
+    margin-bottom: 60px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid rgba(255,215,0,0.2);
+    display: inline-block;
+    font-weight: bold;
+}
+
+/* ILLUSTRATION */
+.illustration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    margin-bottom: 80px;
+    flex-wrap: wrap;
+}
+
+.illust-item {
+    animation: floatLuxury 5s ease-in-out infinite;
+}
+
+.illust-item:nth-child(3) {
+    animation-delay: 1s;
+}
+
+@keyframes floatLuxury {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.illust-img {
+    width: 220px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 3px solid #ffd70066;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.25);
+    margin-bottom: 15px;
+}
+
+.divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.divider-star {
+    color: #ffd700;
+    font-size: 1.3rem;
+    text-shadow: 0 0 10px #ffd700;
+}
+
+.divider-arrow {
+    font-size: 2.2rem;
+    color: #ffd700;
+    text-shadow: 0 0 15px #ffd700;
+    animation: glowPulse 2s infinite;
+}
+
+@keyframes glowPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* SECTION HEADINGS */
+.section-title {
+    font-size: 2rem;
+    color: #f5f4f8;
+    margin: 80px 0 40px;
+    text-shadow: 0 0 15px #9b75ff;
+    letter-spacing: 2px;
+}
+
+/* FLIP CARDS */
+.flip-card {
+    width: 45%;
+    min-width: 290px;
+    height: 380px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.7s;
+    transform-style: preserve-3d;
+    border-radius: 22px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.4);
+}
+
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.flip-card-front img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #b99aff;
+    margin-bottom: 20px;
+    box-shadow: 0 0 25px #8761ff55;
+}
+
+.flip-card-front h3 {
+    font-size: 1.6rem;
+    color: #d8c1ff;
+    margin-bottom: 10px;
+}
+
+.flip-card-front p {
+    color: #b8b5d5;
+    font-size: 0.95rem;
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+}
+
+.flip-card-back h3 {
+    font-size: 1.5rem;
+    color: #d8c1ff;
+    margin-bottom: 20px;
+}
+
+.flip-card-back p {
+    color: #e1e5ff;
+    font-size: 1rem;
+    line-height: 1.9;
+    text-align: justify;
+    padding: 0 15px;
+}
+
+.tap-hint {
+    font-size: 0.85rem;
+    color: #8886a5;
+    margin-top: 15px;
+}
+
+.about-container,
+.social-container {
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+}
+
+/* WEBSITE LINKS */
+.website-links-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+}
+
+.website-label-munir {
+    color: #ffd700;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.website-btn-munir {
+    display: inline-block;
+    padding: 15px 35px;
+    background: linear-gradient(135deg, #ff9800, #ffd700);
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+.website-btn-munir:hover {
+    transform: scale(1.05);
+}
+
+.website-label-azlia {
+    color: #d4b3ff;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.website-btn-azlia {
+    display: inline-block;
+    padding: 15px 35px;
+    background: linear-gradient(135deg, #7b42c2, #9966ff);
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    box-shadow: 0 0 20px rgba(123, 66, 194, 0.4);
+    transition: all 0.3s ease;
+}
+
+.website-btn-azlia:hover {
+    transform: scale(1.05);
+}
+
+/* SOCIAL CARDS */
+.social-card {
+    width: 45%;
+    min-width: 290px;
+    padding: 35px 28px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.4);
+    transition: 0.4s;
+    text-align: center;
+}
+
+.social-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: #b99aff;
+    box-shadow: 0 0 30px #8761ff55;
+}
+
+.social-card h3 {
+    color: #d8c1ff;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 18px 0;
+    text-decoration: none;
+    color: #e5e3ff;
+    transition: 0.3s;
+}
+
+.social-link:hover {
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd70055;
+}
+
+.social-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 40px 10px 20px;
+    color: #7a7b9c;
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: 40px;
+}
+
+/* MOBILE */
+@media(max-width: 650px) {
+    .main-title { font-size: 2.2rem; letter-spacing: 2px; }
+    .sub-title { font-size: 1.1rem; }
+    .illust-img { width: 180px; height: 130px; }
+    .illustration { gap: 30px; }
+    .flip-card, .social-card { width: 100%; }
+    .planet-one { width: 100px; height: 100px; right: 3%; }
+    .planet-two { width: 55px; height: 55px; }
+    .website-links-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+    .music-btn {
+        top: 12px;
+        left: 12px;
+        padding: 10px 17px;
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND MUSIC -->
+<audio id="backgroundMusic" loop preload="auto">
+    <source src="song.mp3" type="audio/mpeg">
+    Your browser does not support audio.
+</audio>
+
+<!-- MUSIC BUTTON -->
+<button class="music-btn" id="musicButton" onclick="toggleMusic()">
+    🎵 Play Music
+</button>
+
+<!-- STARS BACKGROUND -->
+<div id="stars"></div>
+<div class="planet planet-one"></div>
+<div class="planet planet-two"></div>
+
+<div class="overlay">
+<div class="container">
+
+<!-- TITLE -->
+<h1 class="main-title">✨</h1>
+<h2 class="sub-title">Hotel Booking & Car Service System</h2>
+<p class="tagline">"Journey Begins with a Well-Serviced Car, Ends with a Comfortable Stay"</p>
+
+<!-- ILLUSTRATION -->
+<div class="illustration">
+    <div class="illust-item">
+        <img src="car.gif" class="illust-img" alt="Car Service">
+    </div>
+
+    <div class="divider">
+        <span class="divider-star">✦ ✧ ✦</span>
+        <span class="divider-arrow">➜</span>
+        <span class="divider-star">✦ ✧ ✦</span>
+    </div>
+
+    <div class="illust-item">
+        <img src="hotel.jpg" class="illust-img" alt="Hotel">
+    </div>
+</div>
+
+<!-- ABOUT US -->
+<h2 class="section-title">🚀 About Us</h2>
+
+<div class="about-container">
+
+<!-- MUNIR -->
+<div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+
+        <div class="flip-card-front">
+            <img src="munir.jpeg" alt="Munir">
+            <h3>🌟 Munir</h3>
+            <p>👆 Tap to see more</p>
+        </div>
+
+        <div class="flip-card-back">
+            <h3>🌟 About Munir</h3>
+            <p>
+            Hi everyone! My name is Muhamad Badrul Munir bin Azman.
+            I'm 18 years old and I love to learn something new.
+            I live at Sitiawan, Perak. I really love cars and engines! ✨
+            </p>
+            <p class="tap-hint">👆 Tap again to go back</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- AZLIA -->
+<div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-card-inner">
+
+        <div class="flip-card-front">
+            <img src="azlia.jpg" alt="Azlia">
+            <h3>💜 Azlia</h3>
+            <p>👆 Tap to see more</p>
+        </div>
+
+        <div class="flip-card-back">
+            <h3>💜 About Azlia</h3>
+            <p>
+            Hello! I'm Nurul Azlia Binti Radzuan, an 18-year-old
+            from the beautiful town of Lenggong, Perak.
+            I love listening to music and spending time with my
+            family and friends. 💜
+            </p>
+            <p class="tap-hint">👆 Tap again to go back</p>
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+<!-- OUR WEBSITES -->
+<h2 class="section-title">🌐 Visit Our Projects</h2>
+
+<div class="website-links-container">
+
+    <div style="text-align: center;">
+        <p class="website-label-munir">🏎️ This is Munir's Website</p>
+        <a href="https://valvetronic.freedev.app/booking.php"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="website-btn-munir">
+            Valvetronic — Car Service
+        </a>
+    </div>
+
+    <div style="text-align: center;">
+        <p class="website-label-azlia">✨ This is Azlia's Website</p>
+        <a href="https://velorasky.cu.ma/login.php"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="website-btn-azlia">
+            Velora Sky — Hotel System
+        </a>
+    </div>
+
+</div>
+
+<!-- SOCIAL MEDIA -->
+<h2 class="section-title">🌐 Connect With Us</h2>
+
+<div class="social-container">
+
+    <div class="social-card">
+        <h3>🌌 Munir</h3>
+
+        <a href="https://www.instagram.com/munirazmn"
+           target="_blank" rel="noopener noreferrer" class="social-link">
+            <img src="insta.jpg" class="social-icon" alt="Instagram">
+            <span>Instagram: @munirazmn</span>
+        </a>
+
+        <a href="https://www.tiktok.com/@munirazmn"
+           target="_blank" rel="noopener noreferrer" class="social-link">
+            <img src="tiktok.jpg" class="social-icon" alt="TikTok">
+            <span>TikTok: @munirazmn</span>
+        </a>
+
+        <a href="https://www.threads.com/@munirazmn"
+           target="_blank" rel="noopener noreferrer" class="social-link">
+            <img src="threads.jpg" class="social-icon" alt="Threads">
+            <span>Threads: @munirazmn</span>
+        </a>
+    </div>
+
+    <div class="social-card">
+        <h3>🪐 Azlia</h3>
+
+        <a href="https://www.instagram.com/prtyyaaa"
+           target="_blank" rel="noopener noreferrer" class="social-link">
+            <img src="insta.jpg" class="social-icon" alt="Instagram">
+            <span>Instagram: @prtyyaaa</span>
+        </a>
+
+        <a href="https://www.tiktok.com/@zaliyaa._"
+           target="_blank" rel="noopener noreferrer" class="social-link">
+            <img src="tiktok.jpg" class="social-icon" alt="TikTok">
+            <span>TikTok: @zaliyaa._</span>
+        </a>
+
+        <a href="https://www.threads.com/@prtyyaaa"
+           target="_blank" rel="noopener noreferrer" class="social-link">
+            <img src="threads.jpg" class="social-icon" alt="Threads">
+            <span>Threads: @prtyyaaa</span>
+        </a>
+    </div>
+
+</div>
+
+<footer>
+    &copy; 2026 Velora Sky. All rights reserved. 💜
+    <br><br>
+    Crafted with ✧ elegance & passion ✧
+</footer>
+
+</div>
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+
+// CREATE RANDOM STARS
+const starContainer = document.getElementById("stars");
+
+for (let i = 0; i < 200; i++) {
+
+    const star = document.createElement("div");
+
+    star.className = "star";
+
+    const size = Math.random() * 3 + 0.8;
+
+    star.style.width = size + "px";
+    star.style.height = size + "px";
+
+    star.style.left = Math.random() * 100 + "%";
+    star.style.top = Math.random() * 100 + "%";
+
+    star.style.animationDelay = Math.random() * 2.5 + "s";
+
+    starContainer.appendChild(star);
+}
+
+
+// CREATE SHOOTING METEORS
+function createMeteor() {
+
+    const meteor = document.createElement("div");
+
+    meteor.className = "meteor";
+
+    meteor.style.top = Math.random() * 70 + "%";
+    meteor.style.left = (Math.random() * 80 + 20) + "%";
+
+    meteor.style.animationDuration =
+        (Math.random() * 3 + 4) + "s";
+
+    starContainer.appendChild(meteor);
+
+    setTimeout(() => meteor.remove(), 7000);
+}
+
+setInterval(createMeteor, 2000);
+
+
+// BACKGROUND MUSIC FUNCTION
+const music = document.getElementById("backgroundMusic");
+const musicButton = document.getElementById("musicButton");
+
+function toggleMusic() {
+
+    if (music.paused) {
+
+        music.play().then(() => {
+
+            musicButton.innerHTML = "🔊 Pause Music";
+
+            musicButton.classList.add("playing");
+
+        }).catch(error => {
+
+            alert("Unable to play music. Please check your song.mp3 file.");
+
+            console.error("Music error:", error);
+
+        });
+
+    } else {
+
+        music.pause();
+
+        musicButton.innerHTML = "🎵 Play Music";
+
+        musicButton.classList.remove("playing");
+
+    }
+}
+
+
+// UPDATE BUTTON IF MUSIC ENDS OR IS PAUSED
+music.addEventListener("pause", () => {
+
+    musicButton.innerHTML = "🎵 Play Music";
+
+    musicButton.classList.remove("playing");
+
+});
+
+music.addEventListener("play", () => {
+
+    musicButton.innerHTML = "🔊 Pause Music";
+
+    musicButton.classList.add("playing");
+
+});
+
+</script>
+
+</body>
+</html>

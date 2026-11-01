@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: url("background_page.gif") no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.overlay {
+    background: rgba(0,0,0,0.10);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.welcome-text {
+    font-size: 3rem;
+    color: #5a3e75;
+    text-shadow: 2px 2px 5px rgba(255,255,255,0.9);
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.enter-btn {
+    background: linear-gradient(135deg, #c4a8e0, #9b7cd1);
+    color: white;
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 18px 60px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(90,62,117,0.25);
+    transition: all 0.3s ease;
+}
+
+.enter-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(90,62,117,0.35);
+    background: linear-gradient(135deg, #b89ada, #8a6dc4);
+}
+
+/* MUSIC BUTTON */
+.music-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 12px 22px;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 30px;
+    background: rgba(123,66,194,0.65);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 20px #9966ff66;
+    transition: 0.3s;
+    z-index: 999;
+}
+
+.music-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 25px #b99aff;
+}
+
+@media(max-width:600px) {
+    .welcome-text {
+        font-size: 2.2rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND MUSIC -->
+<audio id="backgroundMusic" src="song.mp3" loop></audio>
+
+<!-- MUSIC BUTTON -->
+<button class="music-btn" id="musicButton" onclick="toggleMusic()">
+    🎵 Play Music
+</button>
+
+<div class="overlay">
+
+    <h1 class="welcome-text">✨ Welcome ✨</h1>
+
+    <button class="enter-btn" onclick="enterWebsite()">
+        🚀 Enter
+    </button>
+
+</div>
+
+<script>
+
+// MUSIC SETUP
+const music = document.getElementById("backgroundMusic");
+const musicButton = document.getElementById("musicButton");
+
+music.volume = 0.4;
+
+// RESTORE MUSIC STATUS
+const shouldPlay = sessionStorage.getItem("musicPlaying") === "true";
+const savedTime = parseFloat(sessionStorage.getItem("musicTime") || "0");
+
+if (shouldPlay) {
+    music.currentTime = savedTime;
+
+    music.play().then(() => {
+        musicButton.innerHTML = "🔊 Pause Music";
+    }).catch(() => {
+        musicButton.innerHTML = "🎵 Play Music";
+    });
+}
+
+// PLAY / PAUSE
+function toggleMusic() {
+
+    if (music.paused) {
+
+        music.play().then(() => {
+            sessionStorage.setItem("musicPlaying", "true");
+            musicButton.innerHTML = "🔊 Pause Music";
+        }).catch(error => {
+            console.log(error);
+        });
+
+    } else {
+
+        music.pause();
+        sessionStorage.setItem("musicPlaying", "false");
+        musicButton.innerHTML = "🎵 Play Music";
+
+    }
+}
+
+// SAVE MUSIC TIME
+music.addEventListener("timeupdate", () => {
+    sessionStorage.setItem("musicTime", music.currentTime);
+});
+
+// ENTER MAIN PAGE
+function enterWebsite() {
+
+    sessionStorage.setItem("musicPlaying", !music.paused ? "true" : "false");
+    sessionStorage.setItem("musicTime", music.currentTime);
+
+    window.location.href = "main_page.html";
+}
+
+</script>
+
+</body>
+</html>
